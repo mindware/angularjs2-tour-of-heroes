@@ -8,23 +8,40 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var heroes_1 = require("./heroes");
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var common_1 = require('@angular/common');
+var heroes_service_1 = require('./heroes.service');
 var HeroDetailComponent = (function () {
-    function HeroDetailComponent() {
+    function HeroDetailComponent(heroService, route, location) {
+        this.heroService = heroService;
+        this.route = route;
+        this.location = location;
     }
+    HeroDetailComponent.prototype.goBack = function () {
+        this.location.back();
+    };
+    HeroDetailComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params.forEach(function (params) {
+            var id = +params['id'];
+            _this.heroService.getHero(id)
+                .then(function (hero) { return _this.hero = hero; });
+        });
+    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], HeroDetailComponent.prototype, "hero", void 0);
+    HeroDetailComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'my-hero-detail',
+            templateUrl: 'hero-detail.component.html'
+        }), 
+        __metadata('design:paramtypes', [heroes_service_1.HeroService, router_1.ActivatedRoute, common_1.Location])
+    ], HeroDetailComponent);
     return HeroDetailComponent;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", heroes_1.Hero)
-], HeroDetailComponent.prototype, "hero", void 0);
-HeroDetailComponent = __decorate([
-    core_1.Component({
-        selector: 'my-hero-detail',
-        template: "\n    <div *ngIf=\"hero\">\n      <h2>{{hero.name}} details!</h2>\n      <div><label>id: </label>{{hero.id}}</div>\n      <div>\n        <label>name: </label>\n        <input [(ngModel)]=\"hero.name\" placeholder=\"name\"/>\n      </div>\n    </div>\n    "
-    }),
-    __metadata("design:paramtypes", [])
-], HeroDetailComponent);
 exports.HeroDetailComponent = HeroDetailComponent;
 //# sourceMappingURL=hero-detail.component.js.map
